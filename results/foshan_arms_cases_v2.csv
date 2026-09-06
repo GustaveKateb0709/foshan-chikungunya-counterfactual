@@ -1,0 +1,6 @@
+﻿arm,final_median,final_min,final_max,ratio_vs_actual
+none,95182,78084,127785,7.94
+actual,11988,10695,13018,1.0
+early,8746,7366,9651,0.73
+late,17037,14156,18736,1.421
+rule,6306,3720,6980,0.526

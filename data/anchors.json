@@ -1,0 +1,87 @@
+{
+  "_note": "Machine-readable anchor ledger for the Foshan chikungunya counterfactual study. Every value carries a source; derived values are marked as derivations; no unsourced values were allowed into the model.",
+  "_built": "2026-09-05",
+  "case_curve_2025": {
+    "first_case": {"date": "2025-07-08", "detail": "Import-seeded local outbreak detected through active surveillance in Shunde District", "source": "Foshan municipal press briefing 2025-07-20 (Foshan+ id 300260963)"},
+    "cumulative_anchors": [
+      {"date": "2025-07-15", "shunde": 478, "note": "Cases concentrated in Lecong / Beijiao / Chencun towns"},
+      {"date": "2025-07-18", "three_districts": 1199, "detail": "Shunde 1161 + Nanhai 16 + Chancheng 22"},
+      {"date": "2025-07-19", "city": 1873, "detail": "Shunde 1790 / Chancheng 49 / Nanhai 34; 720 recovered", "source": "Municipal press briefing"},
+      {"date": "2025-07-20", "shunde": 2285, "plus": "1 case in Gaoming (Hecheng subdistrict)"},
+      {"date": "2025-07-21", "city": 2659, "detail": "Shunde 2471 / Chancheng 100 / Nanhai 84 / Sanshui 3 (all five districts now affected)"},
+      {"date": "2025-07-22", "city": 3195},
+      {"date": "2025-07-24", "city": 4014},
+      {"date": "2025-07-26", "province": 4824, "foshan": 4754, "shunde": 4208},
+      {"month": "2025-07", "shunde_month_total": 5295}
+    ],
+    "weekly_new_cases": [
+      {"week": "2025-07-08~14", "province": 481},
+      {"week": "2025-07-20~26", "province": 2940, "foshan": 2882, "detail": "Guangzhou 22 / Zhongshan 18 / Dongguan-Zhuhai-Heyuan 3 / Jiangmen-Yangjiang-Zhaoqing 2 / Qingyuan-Shenzhen-Zhanjiang 1"},
+      {"week": "2025-07-27~08-02", "province": 2892, "foshan": 2770, "detail": "Guangzhou 65 / Dongguan and Zhongshan 11 each / Shenzhen-Jiangmen-Zhaoqing 6 / Meizhou 5 / Zhuhai-Huizhou 4 / Chaozhou 2 / Yangjiang-Yunfu 1"},
+      {"week": "2025-08-03~09", "province": 1387, "foshan": 1212},
+      {"week": "2025-08-10~16", "province": 830, "foshan": 644},
+      {"week": "2025-08-17~23", "province": 336, "foshan": 206},
+      {"week": "2025-08-24~30", "province": 225, "foshan": 119},
+      {"week": "2025-08-31~09-06", "province": 178, "foshan": 85},
+      {"week": "2025-09-07~13", "province": 201, "foshan": 86},
+      {"week": "2025-09-14~20", "province": 2426, "foshan": 81, "jiangmen": 2238, "note": "Epicentre shifted to Jiangmen"},
+      {"week": "2025-09-21~27", "province": 3153, "foshan": 78, "jiangmen": 2927},
+      {"week": "2025-09-28~10-04", "province": 3181, "foshan": 157, "jiangmen": 2480},
+      {"week": "2025-10-05~11", "province": 2257, "foshan": 196, "jiangmen": 1255},
+      {"week": "2025-10-12~18", "province": 2086, "foshan": 241, "jiangmen": 795},
+      {"week": "2025-10-19~25", "province": 868, "foshan": 130, "jiangmen": 199},
+      {"week": "2025-10-26~11-01", "province": 259, "foshan": 51},
+      {"week": "2025-11-16~22", "province": 43, "foshan": 9},
+      {"week": "2025-12-21~27", "province": 0, "note": "First week with zero new provincial cases in months"}
+    ],
+    "daily_peak": {"date": "2025-07-19", "value": 674, "source": "2025-08-09 municipal briefing; China CDC Weekly (doi:10.46234/ccdcw2025.172) reports 681 — discrepancy between the two sources"},
+    "response_end": {"date": "2025-08-26", "event": "Level-III emergency response terminated; transition to routine mode", "criterion": "Nine consecutive days with fewer than 50 daily new cases as of 2025-08-25", "sources": ["Foshan News Network briefing transcript", "China News Service id 10471406", "Nanfang+ id 834pPmkK3d"]},
+    "cumulative_province_2025": {"value": 25258, "asof": "2025-11-11", "foshan_share": 0.4292, "grade": "Aggregated from official weekly briefings via a secondary compilation; each value individually traced and verified"}
+  },
+  "response_timeline_2025": [
+    {"date": "2025-07-20", "quant": {"yidian_high_to_mid_or_below": 0.90, "safe": 0.33}, "measures": "Patriotic-health campaign + breeding-site elimination + adulticiding + door-to-door vector control by professional teams", "source": "Municipal press briefing (Foshan+ id 300260963; Southern Metropolis Daily)"},
+    {"date": "2025-07-28", "quant": {"safe_share": 0.78}, "source": "Foshan Municipal Health Commission (via Xinhua News Agency)"},
+    {"date": "2025-08-05", "quant": {"lecong_yidian_MOI": 1.1, "lecong_yidian_BI": 1.8}, "source": "Nanfang Daily (reported by Liu Qi-yong)"},
+    {"date": "2025-08-09", "quant": {"yidian_compliance": 0.95, "daily_new": 148, "from_peak": 674, "mosquito_17d_below_safe": true}, "source": "Municipal government press briefing (CCTV / Huanqiu / Yangcheng Evening News)"},
+    {"date": "2025-08-22", "event": "National Health Commission press conference: Foshan and Guangzhou down to low-level sporadic transmission"},
+    {"date": "2025-08-26", "event": "Foshan terminates Level-III emergency response"}
+  ],
+  "density_anchors": [
+    {"period": "2025-07", "BI_citywide": 8.5, "note": "Response-affected citywide monthly mean (media citing municipal CDC)", "source": "toutiao.com id 7538265305186025999", "grade": "A"},
+    {"period": "2025-08", "BI_citywide": 6.2, "note": "Down 27% from July, still above the safety line of 5; Zumiao (Chancheng), Guicheng (Nanhai), Ronggui (Shunde) and Xinan (Sanshui) at 8-10", "source": "Same as above", "grade": "A"},
+    {"period": "2025-03", "MOI_citywide_derived": 1.79, "derivation": "1.04/(1-0.4190)", "grade": "B (derived)"},
+    {"period": "2026-03", "MOI_citywide": 1.04, "points": 748, "note": "No medium- or high-risk sites citywide; ~60,000 surveillance points deployed that month", "source": "Foshan+ 2026-04-16 newsId=1025555", "grade": "A"},
+    {"period": "2016-05", "BI_chancheng_district": 12.18, "MOI_chancheng_district": 23.55, "note": "Historical peak-season urban reference (district monthly report, official original)", "url": "chancheng.gov.cn post_873818", "grade": "A (historical anchor)"}
+  ],
+  "provincial_halfmonth_point_series": {
+    "note": "Guangdong CDC 'mosquito map' releases: number of high-density township-level points in Foshan (BI>20 or MOI>20); not published during winter suspension periods",
+    "series": [
+      {"period": "2023-09 (1st half)", "province": 12, "foshan": 0},
+      {"period": "2023-09 (2nd half)", "province": 37, "foshan": 1},
+      {"period": "2023-10 (1st half)", "province": 6, "foshan": 0},
+      {"period": "2023-10 (2nd half)", "province": 7, "foshan": 0},
+      {"period": "2024-04 (2nd half)", "province": 21, "foshan": 1},
+      {"period": "2024-05 (1st half)", "province": 35, "foshan": 0},
+      {"period": "2024-05 (2nd half)", "province": 44, "foshan": 5},
+      {"period": "2024-06 (1st half)", "province": 49, "foshan": 4},
+      {"period": "2024-06 (2nd half)", "province": 49, "foshan": 7},
+      {"period": "2024-07 (1st half)", "province": 39, "foshan": 7},
+      {"period": "2024-07 (2nd half)", "province": 23, "foshan": 0},
+      {"period": "2024-08 (1st half)", "province": 31, "foshan": 0},
+      {"period": "2024-08 (2nd half)", "province": 24, "foshan": 0},
+      {"period": "2024-09 (1st half)", "province": 30, "foshan": 0},
+      {"period": "2024-09 (2nd half)", "province": 26, "foshan": 0},
+      {"period": "2024-10 (1st half)", "province": 13, "foshan": 0},
+      {"period": "2024-10 (2nd half)", "province": 8, "foshan": 0},
+      {"period": "2024-11 (1st half)", "province": 8, "foshan": 0},
+      {"period": "2024-11 (2nd half)", "province": 1, "foshan": 0},
+      {"period": "2025-04 (1st half)", "province": 5, "foshan": 0}
+    ]
+  },
+  "excluded_values": [
+    {"value": "BI 22.94 / MOI 7.06 (sometimes presented as Foshan CDC 2025 monthly data)", "reason": "These figures trace to Chancheng District 2016-05 records: Zumiao subdistrict MOI = 22.94 and district-wide DI = 7.06 (chancheng.gov.cn post_873818); they have been misquoted as 2025 citywide values", "verdict": "Excluded"},
+    {"value": "2,285 cases in three Foshan districts, July 2026", "reason": "Recycled 2025 news items: the official provincial report records only 171 chikungunya cases province-wide in July 2026; 2,285 is the official 2025-07-18/20 figure", "verdict": "Excluded"},
+    {"value": "617 cases in a single week in Foshan, 2024 (week 40)", "reason": "AI-generated health content site without a traceable source", "verdict": "Unverified; not used"}
+  ],
+  "weather": {"file": "data/era5_foshan_daily_2024-2026.csv", "point": "23.02N, 113.13E (Chancheng)", "days": 974, "vars": ["T_mean", "T_max", "T_min", "rain", "RH_mean"], "source": "Open-Meteo ERA5 archive"}
+}
