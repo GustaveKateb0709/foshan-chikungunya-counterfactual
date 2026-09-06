@@ -56,4 +56,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Citation
 
-If you use this code or the anchor database, please cite the manuscript. This release is archived and citable via its Zenodo DOI: [10.5281/zenodo.22525691](https://doi.org/10.5281/zenodo.22525691).
+If you use this code or the anchor database, please cite the manuscript.
