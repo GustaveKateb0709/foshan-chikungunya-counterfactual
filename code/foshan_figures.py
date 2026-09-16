@@ -4,10 +4,11 @@
 paper.  300 dpi PNG + vector PDF; English labels; single palette; titles
 follow "Fig. N. <clause>." and match filenames figN_* (three-way rule).
 
-  fig1_workflow        study schematic
-  fig2_reconstruction  reported curve + model reconstruction + detection wave
-  fig3_counterfactual  five arms, citywide reported cumulative, multistart band
-  fig4_validation      under-ascertainment envelope + density anchors
+  workflow             study schematic
+  reconstruction       reported curve + model reconstruction + detection wave
+  counterfactual_trajectories
+                       five arms, citywide reported cumulative, multistart band
+  validation_anchors   under-ascertainment envelope + density anchors
 """
 import json
 import os
@@ -103,7 +104,7 @@ def collect_curves():
     return curves, len(thetas)
 
 
-def fig1_workflow():
+def workflow():
     fig, ax = plt.subplots(figsize=(11.4, 4.9))
     ax.set_xlim(0, 124)
     ax.set_ylim(1, 44)
@@ -153,11 +154,11 @@ def fig1_workflow():
             ha="center", va="center", fontsize=9.2, color=INK,
             linespacing=1.4)
     ax.set_ylim(1.5, 46)
-    finish(fig, "fig1_workflow",
-           "Fig. 1. Study workflow.")
+    finish(fig, "workflow",
+           "Study workflow.")
 
 
-def fig2_reconstruction(daily_dates, curves):
+def reconstruction(daily_dates, curves):
     stack = pd.concat(curves["actual"], axis=1)
     med = stack.median(axis=1)
     lo, hi = stack.min(axis=1), stack.max(axis=1)
@@ -184,12 +185,12 @@ def fig2_reconstruction(daily_dates, curves):
     ax.set_ylim(0, 12500)
     ax.legend(loc="lower right", fontsize=9.4, frameon=False,
               handlelength=1.6)
-    finish(fig, "fig2_reconstruction",
-           "Fig. 2. Reported cases, model reconstruction and the "
+    finish(fig, "reconstruction",
+           "Reported cases, model reconstruction and the "
            "detection wave.")
 
 
-def fig3_counterfactual(daily_dates, curves):
+def counterfactual_trajectories(daily_dates, curves):
     fig, ax = plt.subplots(figsize=(10.4, 5.4))
     for arm in ("none", "late", "actual", "early", "rule"):
         stack = pd.concat(curves[arm], axis=1)
@@ -212,12 +213,12 @@ def fig3_counterfactual(daily_dates, curves):
     ax.set_ylabel("Cumulative reported cases ($\\times 10^4$)")
     ax.legend(loc="upper left", fontsize=9.8, frameon=False,
               handlelength=1.6)
-    finish(fig, "fig3_counterfactual",
-           "Fig. 3. Counterfactual reported-case trajectories under five "
+    finish(fig, "counterfactual_trajectories",
+           "Counterfactual reported-case trajectories under five "
            "response scenarios.")
 
 
-def fig4_validation(daily_dates, curves, thetas):
+def validation_anchors(daily_dates, curves, thetas):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11.6, 4.8),
                                    gridspec_kw={"width_ratios": [1, 1.3]})
     factors = []
@@ -270,8 +271,8 @@ def fig4_validation(daily_dates, curves, thetas):
              transform=ax2.transAxes, ha="center", va="top", fontsize=9.5,
              color=INK)
     fig.subplots_adjust(bottom=0.20, wspace=0.24)
-    finish(fig, "fig4_validation",
-           "Fig. 4. Under-ascertainment envelope and density-model "
+    finish(fig, "validation_anchors",
+           "Under-ascertainment envelope and density-model "
            "validation.")
 
 
@@ -279,11 +280,11 @@ def main():
     daily_dates, pfi, t_daily, n, detect_idx, norm_idx = build_daily_args()
     thetas, ms_summary = load_thetas()
     print("multistart thetas:", len(thetas), "| summary:", ms_summary)
-    fig1_workflow()
+    workflow()
     curves, n_th = collect_curves()
-    fig2_reconstruction(daily_dates, curves)
-    fig3_counterfactual(daily_dates, curves)
-    fig4_validation(daily_dates, curves, thetas)
+    reconstruction(daily_dates, curves)
+    counterfactual_trajectories(daily_dates, curves)
+    validation_anchors(daily_dates, curves, thetas)
     rows = []
     act_med = float(pd.concat(curves["actual"], axis=1).iloc[-1].median())
     for arm in ("none", "actual", "early", "late", "rule"):

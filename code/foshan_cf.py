@@ -40,9 +40,9 @@ RESULTS = os.path.join(ROOT, "results")
 os.makedirs(RESULTS, exist_ok=True)
 
 # ------------------------------------------------------------------ PFI model
-# Ported verbatim from the Guangzhou benchmark pipeline (aedes-benchmark-
-# guangzhou, pipeline.py); literature anchors: Delatte 2009 (PMID 19198515),
-# Briere 1999.  Constants are species-level literature values, not city fits.
+# Mechanistic potential-fecundity-index sub-model; literature anchors:
+# Delatte 2009 (PMID 19198515), Briere 1999.  Constants are species-level
+# literature values, not city fits.
 T_DEV0, T_OPT, T_MAX = 10.0, 27.0, 39.0
 SURV_MAX, SURV_K = 0.95, 0.004
 RAIN_THRESH, RAIN_GAIN = 5.0, 2.5
@@ -129,11 +129,11 @@ def response_schedule(n_weeks, onset_idx, ramp_weeks, c_peak, c_sustain,
 
 
 # ------------------------------------------------------- aggregate decays
-# NOTE: the #2 grid-level stock model used slow decay (0.85) for a treated
-# GRID.  Here we model the CITYWIDE AGGREGATE: only a fraction of the city is
-# removed each week and untreated sites rebound quickly ("2-3 weeks to
-# rebound", Foshan CDC via media) -> fast effective decay.  Documented as an
-# aggregate-encoding assumption; perturbed in sensitivity analysis.
+# This sub-model represents the CITYWIDE AGGREGATE rather than a single
+# treated grid: only a fraction of the city is removed each week and
+# untreated sites rebound quickly (reported re-colonisation within 2-3
+# weeks) -> fast effective decay.  Documented as an aggregate-encoding
+# assumption; perturbed in sensitivity analysis.
 SR_DECAY, SP_DECAY = 0.45, 0.30
 
 

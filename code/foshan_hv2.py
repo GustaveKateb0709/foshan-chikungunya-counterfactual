@@ -18,7 +18,12 @@ Framework: standard host-vector ODE with asymptomatic compartment (Zhao et
 al., Infect Dis Poverty 2025;14:106 — cited for the framework); vector
 abundance N_m(t) per zone from the weather-driven density model (foshan_cf).
 
-Usage:  python foshan_hv2.py fit
+Usage:
+  python foshan_hv2.py fit      # 13-parameter Nelder-Mead fit -> params.json
+  python foshan_hv2.py multi    # 6-start uncertainty envelope
+  python foshan_hv2.py verify   # rebuild fit_check.csv from the stored
+                                # 11-parameter params.json + the two fixed
+                                # delay parameters (honest reproducibility path)
 """
 import json
 import os
@@ -49,6 +54,12 @@ T1 = "2025-12-31"
 DETECT = "2025-07-06"
 NORMALISE = "2025-08-24"
 
+# NOTE (provenance): ANCHORS_SHUNDE is a *source-ledger* constant covering
+# 2025-07-15..07-26.  It is NOT consumed by any calculation (main_fit builds
+# a_tA/a_vA from it and then discards them); the only early-phase observation
+# that actually enters an anchor is the single Shunde point 478 @ 2025-07-15,
+# which is hard-coded separately (see ANCHOR_0715_SHUNDE in the r0_* scripts
+# and reported_715 in main_fit).  Retained here for traceability.
 ANCHORS_SHUNDE = [("2025-07-15", 478), ("2025-07-18", 1161),
                   ("2025-07-19", 1790), ("2025-07-20", 2285),
                   ("2025-07-21", 2471), ("2025-07-26", 4208)]
@@ -62,6 +73,26 @@ ANCHORS_CITY = [("2025-07-19", 1873), ("2025-07-21", 2659),
                 ("2025-10-04", 10192), ("2025-10-11", 10388),
                 ("2025-10-18", 10629), ("2025-10-25", 10759),
                 ("2025-11-01", 10810), ("2025-11-22", 10819)]
+
+# The two operational-delay parameters were fixed *after* the 11-parameter
+# fit that produced foshan_hv2_params.json (which stores a 11-element theta).
+# Their canonical raw values below are appended whenever a 13-parameter
+# vector is required (main_fit initial point, multistart base, verify).
+L_ESC0 = -0.4055     # l_esc  -> esc_off ~ 13 d
+L_STAG0 = -0.9229    # l_stag -> stag_b ~ 2 d
+
+
+def centre_theta(pj):
+    """Return the 13-parameter centre vector from a params.json dict.
+
+    The stored vector is 11 elements in the original (early) params.json and
+    13 after a fresh main_fit(); the two delay parameters are appended only
+    when absent, so every downstream reader works with either vintage.
+    """
+    th = list(pj["theta"])
+    if len(th) == 11:
+        th = th + [L_ESC0, L_STAG0]
+    return np.array(th)
 
 
 def eip50_days(T):
@@ -252,6 +283,8 @@ def main_fit():
         np.log(0.78), np.log(0.54), np.log(5.0), -0.68,
         np.log(0.65), np.log(0.45), 1.73, -0.62, 0.32, -1.73,
         -0.575,
+        L_ESC0,            # l_esc  (~13 d escalation offset)
+        L_STAG0,           # l_stag (~2 d B-zone stagger)
     ])
     res = minimize(loss, theta0, method="Nelder-Mead",
                    options={"maxiter": 2500, "xatol": 1e-3, "fatol": 1e-4})
@@ -315,11 +348,9 @@ def multistart(n_starts=6):
 
     with open(os.path.join(RES, "foshan_hv2_params.json")) as f:
         prev = json.load(f)
-    # defaults = the previously fixed values (13 d escalate offset, 2 d B-zone
-    # stagger); the saved params json predates these parameters
-    l_esc0 = -0.4055   # esc_off ~ 13 d
-    l_stag0 = -0.9229  # stag_b ~ 2 d
-    base = np.array(list(prev["theta"]) + [l_esc0, l_stag0])
+    # the two delay parameters are appended only if the stored vector
+    # predates them (11-element vintage)
+    base = centre_theta(prev)
     rng = np.random.default_rng(2026)
     results = []
     for k in range(n_starts):
@@ -371,10 +402,64 @@ def multistart(n_starts=6):
     print("saved foshan_hv2_envelope.csv / foshan_hv2_multistart.json")
 
 
+def verify():
+    """Honest reproducibility path for foshan_hv2_fit_check.csv.
+
+    The 11-parameter Nelder-Mead fit that produced foshan_hv2_params.json
+    predates the two fixed delay parameters and can no longer be re-run by
+    main_fit() under the current 13-parameter unpack().  This mode instead
+    reconstructs the exact 13-parameter centre used everywhere else --
+    params.json['theta'] (11) + [L_ESC0, L_STAG0] -- re-runs run_two_zone
+    and rewrites the fit-check table, printing the vector and the recomputed
+    loss so the two can be reconciled.  The recomputed loss (~0.1849)
+    differs from the loss stored in params.json (~0.1837) because the
+    parameter sets differ; this is reported, not smoothed over.
+    """
+    daily_dates, pfi, t_daily, n, detect_idx, norm_idx = build_daily()
+    with open(os.path.join(RES, "foshan_hv2_params.json")) as f:
+        prev = json.load(f)
+    vintage = len(prev["theta"])
+    theta13 = centre_theta(prev)
+    a_tC = np.array([(pd.Timestamp(d) - pd.Timestamp(T0)).days
+                     for d, _ in ANCHORS_CITY])
+    a_vC = np.array([v for _, v in ANCHORS_CITY])
+    post = np.array([pd.Timestamp(d) >= pd.Timestamp("2025-08-16")
+                     for d, _ in ANCHORS_CITY])
+
+    r = run_two_zone(theta13, daily_dates, pfi, t_daily, n, detect_idx,
+                     norm_idx)
+    cumC = np.cumsum(r["onsets_A"] + r["onsets_B"])
+    predC = cumC[np.clip(a_tC, 0, n - 1)]
+    relC = (predC[post] - a_vC[post]) / np.maximum(a_vC[post], 1.0)
+    loss = float(np.sum(relC ** 2))
+    i715 = int(np.argmax(daily_dates >= pd.Timestamp("2025-07-15")))
+    true_715 = float(r["cum_A"].values[i715] + r["cum_B"].values[i715])
+
+    cmp = pd.DataFrame({
+        "date": [d for d, _ in ANCHORS_CITY],
+        "series": ["city_pre" if d < "2025-08-16" else "city_post"
+                   for d, _ in ANCHORS_CITY],
+        "observed": a_vC, "model_onsets_cum": predC.round(1)})
+    cmp.loc[len(cmp)] = {"date": "2025-07-15", "series": "pre_wave_validation",
+                         "observed": 478.0,
+                         "model_onsets_cum": round(true_715, 1)}
+    cmp.to_csv(os.path.join(RES, "foshan_hv2_fit_check.csv"), index=False,
+               encoding="utf-8-sig")
+    print("verify: params.json theta vintage  = %d element(s)%s"
+          % (vintage, " -> appended [L_ESC0, L_STAG0]" if vintage == 11 else ""))
+    print("verify: 13-param centre theta   =", [round(x, 6) for x in theta13])
+    print("verify: stored params.json loss  = %.6f" % prev["loss"])
+    print("verify: recomputed loss (13-param)= %.6f" % loss)
+    print("verify: cum_true @2025-07-15      = %.1f" % true_715)
+    print("verify: rewrote results/foshan_hv2_fit_check.csv")
+
+
 if __name__ == "__main__":
     import sys
     mode = sys.argv[1] if len(sys.argv) > 1 else "fit"
     if mode == "multi":
         multistart()
+    elif mode == "verify":
+        verify()
     else:
         main_fit()
