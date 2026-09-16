@@ -83,6 +83,10 @@ SET_STYLE = {
     "free":     {"color": "#CC79A7", "marker": "D", "ls": "",   "label": "full-free"},
 }
 S_MIN_BOUND = {"tight": 0.35, "baseline": 0.20, "loose": 0.05}
+# Apparent ceilings (the dashed vertical guide lines in Fig 1b) are
+# ANALYST-SET by inspection of the loss profile (see Table 3 of the
+# manuscript); they are judgement calls, not fitted quantities — declared
+# as such in the manuscript figure caption.
 R0_CEILING = {"tight": 2.0, "baseline": 3.5, "loose": 5.5}
 SET_ORDER = ["tight", "baseline", "loose"]
 
