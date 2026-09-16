@@ -41,12 +41,14 @@ code/
                              (all anchors dated before 2025-08-16)
   foshan_eid_figures.py      manuscript Figures 1 and 2 plus the traceability
                              table fig_points_used.csv
-figures/                    pre-generated outputs. fig1_identifiability and
+figures/                    pre-generated outputs, numbered fig1-fig6.
+                             fig1_identifiability and
                              fig2_counterfactual_factors are the manuscript
                              Figures 1-2 (regenerate with
-                             code/foshan_eid_figures.py); workflow,
-                             reconstruction, counterfactual_trajectories and
-                             validation_anchors are calibration-pipeline
+                             code/foshan_eid_figures.py); fig3_workflow,
+                             fig4_reconstruction,
+                             fig5_counterfactual_trajectories and
+                             fig6_validation_anchors are calibration-pipeline
                              diagnostics (regenerate with code/foshan_figures.py)
 data/
   anchors.json               case, response-milestone and density anchors,
