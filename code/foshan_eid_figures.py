@@ -55,6 +55,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(BASE, ".."))
@@ -175,7 +176,7 @@ def fig1(b):
     axb.set_xlabel("Achieved $R_0$ (next-generation matrix)")
     axb.set_ylabel("Post-saturation loss  (log scale)")
     axb.set_ylim(1e-2, 1e4)
-    axb.legend(frameon=False, fontsize=8, loc="lower right", handlelength=1.8)
+    # no legend here: panel (a) already carries the shared set legend
 
     for ax, lab in ((axa, "(a)"), (axb, "(b)")):
         ax.text(-0.02, 1.06, lab, transform=ax.transAxes, fontsize=10,
@@ -213,6 +214,9 @@ def fig2(used):
                        label=st["label"], zorder=3)
         ax.set_xscale("log")
         ax.set_xlim(XLO, XHI)
+        ax.set_xticks([0.1, 1.0, 10.0, 100.0, 1000.0])
+        ax.xaxis.set_major_formatter(
+            mticker.FuncFormatter(lambda v, p: "%g" % v))
         ax.axvspan(XLO, 1.0, color="#000000", alpha=0.04, zorder=0)
         ax.axvline(1.0, color="#444444", ls="-", lw=1.1, zorder=1)
         ax.set_ylim(-0.5, 0.5)
@@ -223,17 +227,17 @@ def fig2(used):
         ax.spines["left"].set_visible(False)
         ax.tick_params(labelsize=8)
 
-    axes[0].text(1.0, 0.44, "1.0 = actual", fontsize=7, ha="left",
+    axes[0].text(1.6, 0.44, "1.0 = actual", fontsize=7, ha="left",
                  va="center", color="#444444")
     # single shared x-label (repeating it per panel would overlap)
-    fig.text(0.512, 0.20, "Counterfactual factor vs actual response",
+    fig.text(0.512, 0.15, "Counterfactual factor vs actual response",
              ha="center", va="center", fontsize=8)
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, frameon=False, fontsize=8, ncol=4,
                loc="lower center", bbox_to_anchor=(0.5, -0.02),
                handletextpad=0.2, columnspacing=1.1)
     # disclose the vertical-axis semantics: the offsets are pure de-overlap
-    fig.text(0.512, 0.118,
+    fig.text(0.512, 0.088,
              "Vertical offsets separate overlapping solutions; the vertical "
              "axis carries no quantitative meaning.",
              ha="center", va="center", fontsize=6.4, color="#555555")
