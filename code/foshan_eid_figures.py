@@ -4,7 +4,7 @@
 
 Produces (both .png and .pdf, 300 dpi, white background, colour-blind-safe):
 
-  02_Figures/fig1_identifiability.png/.pdf
+  figures/fig1_identifiability.png/.pdf
       (a) achieved NGM R0 (x) vs isolation residual susceptibility s_min (y),
           one line per constraint set; horizontal dashed lines mark each set's
           s_min lower bound -> shows each line descending onto its own lower
@@ -13,7 +13,7 @@ Produces (both .png and .pdf, 300 dpi, white background, colour-blind-safe):
           three sets; vertical dashed lines mark each set's apparent R0
           ceiling -> shows where the fit collapses.
 
-  02_Figures/fig2_counterfactual_factors.png/.pdf
+  figures/fig2_counterfactual_factors.png/.pdf
       three panels (early / late / none) showing every ACCEPTABLE solution's
       counterfactual factor (true-infection final size relative to the
       actual-response arm), log x-axis, vertical baseline at 1.0
@@ -23,7 +23,7 @@ Produces (both .png and .pdf, 300 dpi, white background, colour-blind-safe):
          vertically offset only to separate overlapping solutions; the
          vertical axis carries no quantitative meaning.
 
-  04_Code_and_Data/results/fig_points_used.csv
+  results/fig_points_used.csv
       one row per point ACTUALLY DRAWN, with the source file, the plotted
       columns and a boolean `used` flag:
         panel = fig1a / fig1b : every row of bound_profile_i600.csv

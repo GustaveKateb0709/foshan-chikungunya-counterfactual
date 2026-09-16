@@ -98,7 +98,7 @@ python foshan_validation.py r0
 # outbreak figures and the five-arm table
 python foshan_figures.py
 
-# manuscript Figures 1-2 and fig_points_used.csv (writes ../02_Figures/)
+# manuscript Figures 1-2 and fig_points_used.csv (writes figures/)
 python foshan_eid_figures.py
 
 # held-out early-anchor comparison
